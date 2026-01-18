@@ -1,0 +1,318 @@
+Project Description: GNSS Bridge for Windows
+Overview
+
+Design and implement a Windows-only GNSS data bridge application that converts GNSS data received over Wi-Fi (TCP/UDP) into serial outputs (physical and virtual COM ports), with optional stream splitting, logging, and GNSS-specific diagnostics.
+
+The primary target users are Emlid GNSS receiver users (Reach RS2/RS+, RX, etc.) who need to forward Wi-Fi-received NMEA data to legacy Windows applications that require COM ports, or to physical RS-232/USB-serial interfaces.
+
+The product must be simpler, more reliable, and more GNSS-aware than Franson GPSGate Splitter, with a strong focus on:
+
+RTK/GNSS workflows
+
+Low latency
+
+Stream integrity
+
+Field reliability
+
+Minimal configuration friction
+
+This is not a generic serial virtualization tool; it is a GNSS-first bridge utility.
+
+Core Use Cases
+
+Wi-Fi → Physical Serial
+
+Receive NMEA over UDP/TCP from a GNSS receiver
+
+Forward to a USB-RS232 or USB-TTL adapter
+
+Used by marine, survey, construction, and timing systems
+
+Wi-Fi → Virtual COM
+
+Receive NMEA over UDP/TCP
+
+Present it as a Windows COMx port for legacy software
+
+Stream Splitting
+
+One input → multiple outputs:
+
+Virtual COM
+
+Physical COM
+
+UDP rebroadcast
+
+File logger
+
+Field Diagnostics
+
+Verify data freshness, latency, sentence rate, and health
+
+Detect dropped or stale GNSS streams
+
+Provide immediate operator feedback
+
+Competitive Differentiation vs GPSGate
+
+GNSS-specific configuration (not generic GPS)
+
+Built-in NMEA filtering, rate limiting, and presets
+
+Latency and data-age monitoring
+
+Auto-reconnect and watchdog logic
+
+Preset templates for common GNSS receivers (Emlid profiles)
+
+Simpler UX focused on one job: get GNSS into COM ports reliably
+
+Functional Requirements
+Input Sources
+
+UDP listener (primary)
+
+TCP client
+
+TCP server (optional but recommended)
+
+Physical serial input (optional)
+
+Output Targets
+
+Physical serial port (USB-serial)
+
+Virtual COM port
+
+UDP rebroadcast
+
+File logger (NMEA + timestamps)
+
+GNSS-Specific Processing
+
+NMEA sentence filtering (GGA, RMC, VTG, GSA, etc.)
+
+Rate control (1 / 5 / 10 Hz)
+
+Timestamping on receipt
+
+Stream integrity checks
+
+Reliability
+
+Automatic reconnect on network drop
+
+Watchdog for stale data
+
+Graceful recovery without restarting app
+
+Clear error state reporting
+
+Architecture Overview
+High-Level Architecture
+
+The system is composed of four main layers:
+
+┌─────────────────────────────┐
+│        User Interface        │
+│  (WPF / WinUI / Qt)          │
+└──────────────┬──────────────┘
+               │
+┌──────────────▼──────────────┐
+│     Control & Orchestration  │
+│   (Session / Routing Logic)  │
+└──────────────┬──────────────┘
+               │
+┌──────────────▼──────────────┐
+│     Data Processing Layer    │
+│ (Parsing, Filtering, Timing) │
+└──────────────┬──────────────┘
+               │
+┌──────────────▼──────────────┐
+│        I/O Abstraction       │
+│ (Network, Serial, Virtual)  │
+└─────────────────────────────┘
+
+1. I/O Abstraction Layer
+Responsibilities
+
+Normalize all inputs and outputs into a common byte stream interface
+
+Hide OS-specific implementation details from higher layers
+
+Components
+
+UDP Input Module
+
+TCP Client Module
+
+TCP Server Module
+
+Physical Serial Output Module
+
+Virtual COM Output Module
+
+Each module implements a shared interface:
+
+Start()
+
+Stop()
+
+Write(byte[])
+
+Status()
+
+All I/O is non-blocking and asynchronous.
+
+2. Data Processing Layer
+Responsibilities
+
+Interpret raw GNSS streams
+
+Enforce GNSS-specific constraints
+
+Maintain timing and health metadata
+
+Subsystems
+
+NMEA Parser
+
+Sentence identification
+
+Optional checksum validation
+
+Sentence Filter
+
+Allow/deny per sentence type
+
+Rate Limiter
+
+Output decimation or pacing
+
+Timestamp & Latency Tracker
+
+Arrival time
+
+Inter-sentence gaps
+
+Health Monitor
+
+Detect stale data
+
+Trigger watchdog events
+
+This layer must be stateless per sentence, except for timing and health tracking.
+
+3. Control & Orchestration Layer
+Responsibilities
+
+Define routing rules between inputs and outputs
+
+Manage lifecycle of streams
+
+Coordinate reconnects and failover
+
+Enforce user configuration
+
+Key Concepts
+
+Session
+
+One input → N outputs
+
+Routing Graph
+
+Input → Processing → Outputs
+
+Watchdog Controller
+
+Monitors health signals
+
+Triggers UI alerts and auto-restart
+
+This layer is the brain of the application.
+
+4. User Interface Layer
+UX Principles
+
+One-screen setup
+
+Minimal GNSS knowledge required
+
+Immediate feedback
+
+UI Elements
+
+Input selector (UDP/TCP)
+
+Output selector (Physical / Virtual COM)
+
+Preset selector (Emlid profiles)
+
+Live NMEA preview
+
+Data age / latency indicator
+
+Status banner (OK / STALE / ERROR)
+
+The UI should never block data flow and should reflect system state in real time.
+
+Virtual COM Strategy (Windows)
+
+Two acceptable approaches:
+
+Bundle or license a signed virtual COM driver
+
+Leverage an existing redistributable driver with legal approval
+
+Requirements:
+
+Stable COM numbering
+
+Clean install/uninstall
+
+No manual driver signing steps for users
+
+Predictable behavior across reboots
+
+If virtual COM proves complex, the system must still be fully functional for Wi-Fi → physical serial, which covers a large portion of users.
+
+Non-Functional Requirements
+
+Windows 10 / 11
+
+Single-installer EXE
+
+Runs without admin privileges (except driver install)
+
+Minimal CPU usage (<2–3%)
+
+Survives network interruptions
+
+No hard dependency on internet access
+
+Future Expansion (Not in MVP)
+
+NTRIP client passthrough
+
+RTCM monitoring
+
+PPS timing status
+
+Headless service mode
+
+Linux/macOS ports
+
+Success Criteria
+
+The product is successful if:
+
+A user can go from install → live COM output in under 2 minutes
+
+It replaces GPSGate for Emlid workflows
+
+Field users trust it to run all day without babysitting
+
+Support tickets decrease due to better diagnostics

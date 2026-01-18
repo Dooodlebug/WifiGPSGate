@@ -1,0 +1,235 @@
+<Window x:Class="WifiGPSGate.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WifiGPSGate.App"
+        xmlns:vm="clr-namespace:WifiGPSGate.App.ViewModels"
+        mc:Ignorable="d"
+        Title="WifiGPSGate - GNSS Bridge"
+        Height="600" Width="800"
+        MinHeight="500" MinWidth="650"
+        WindowStartupLocation="CenterScreen"
+        d:DataContext="{d:DesignInstance vm:MainViewModel}">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </Window.Resources>
+
+    <Grid Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Input/Output Configuration -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Input Configuration -->
+            <GroupBox Grid.Column="0" Header="Input">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <RadioButton Content="UDP" IsChecked="{Binding UseUdpInput}" Margin="0,0,16,0"/>
+                        <RadioButton Content="TCP Client" IsChecked="{Binding UseTcpInput}"/>
+                    </StackPanel>
+
+                    <!-- UDP Settings -->
+                    <StackPanel Visibility="{Binding UseUdpInput, Converter={StaticResource BoolToVis}}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Port:" VerticalAlignment="Center" Width="80"/>
+                            <TextBox Text="{Binding UdpPort, UpdateSourceTrigger=PropertyChanged}"
+                                     Width="80" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- TCP Settings -->
+                    <StackPanel Visibility="{Binding UseTcpInput, Converter={StaticResource BoolToVis}}">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                            <TextBlock Text="Host:" VerticalAlignment="Center" Width="80"/>
+                            <TextBox Text="{Binding TcpHost, UpdateSourceTrigger=PropertyChanged}"
+                                     Width="150" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Port:" VerticalAlignment="Center" Width="80"/>
+                            <TextBox Text="{Binding TcpPort, UpdateSourceTrigger=PropertyChanged}"
+                                     Width="80" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <Separator Margin="0,12"/>
+
+                    <Button Content="Apply Emlid Preset" Command="{Binding ApplyEmlidPresetCommand}"
+                            HorizontalAlignment="Left" Padding="12,4"/>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Output Configuration -->
+            <GroupBox Grid.Column="1" Header="Output">
+                <StackPanel>
+                    <!-- Serial Output -->
+                    <CheckBox Content="Physical COM Port" IsChecked="{Binding EnableSerialOutput}"
+                              Margin="0,0,0,8"/>
+                    <StackPanel Margin="20,0,0,8"
+                                IsEnabled="{Binding EnableSerialOutput}">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                            <ComboBox ItemsSource="{Binding AvailableSerialPorts}"
+                                      SelectedItem="{Binding SelectedSerialPort}"
+                                      Width="100" Margin="0,0,8,0"/>
+                            <Button Content="Refresh" Command="{Binding RefreshSerialPortsCommand}"
+                                    Padding="8,2"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Baud:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <ComboBox ItemsSource="{Binding AvailableBaudRates}"
+                                      SelectedItem="{Binding SelectedBaudRate}"
+                                      Width="100"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- File Output -->
+                    <CheckBox Content="File Log" IsChecked="{Binding EnableFileOutput}"
+                              Margin="0,8,0,8"/>
+                    <StackPanel Orientation="Horizontal" Margin="20,0,0,0"
+                                IsEnabled="{Binding EnableFileOutput}">
+                        <TextBox Text="{Binding LogFilePath, UpdateSourceTrigger=PropertyChanged}"
+                                 Width="180" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <Button Content="Browse..." Command="{Binding BrowseLogFileCommand}"
+                                Padding="8,2"/>
+                    </StackPanel>
+
+                    <!-- UDP Broadcast Output -->
+                    <CheckBox Content="UDP Broadcast" IsChecked="{Binding EnableUdpBroadcastOutput}"
+                              Margin="0,8,0,8"/>
+                    <StackPanel Margin="20,0,0,0"
+                                IsEnabled="{Binding EnableUdpBroadcastOutput}">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                            <TextBlock Text="Address:" VerticalAlignment="Center" Width="55"/>
+                            <TextBox Text="{Binding UdpBroadcastAddress, UpdateSourceTrigger=PropertyChanged}"
+                                     Width="120" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Port:" VerticalAlignment="Center" Width="55"/>
+                            <TextBox Text="{Binding UdpBroadcastPort, UpdateSourceTrigger=PropertyChanged}"
+                                     Width="60" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Virtual COM Port Output -->
+                    <CheckBox Content="Virtual COM Port" IsChecked="{Binding EnableVirtualComOutput}"
+                              Margin="0,8,0,8"/>
+                    <StackPanel Margin="20,0,0,0"
+                                IsEnabled="{Binding EnableVirtualComOutput}">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                            <TextBlock Text="Port:" VerticalAlignment="Center" Width="55"/>
+                            <TextBox Text="{Binding VirtualComPortName, UpdateSourceTrigger=PropertyChanged}"
+                                     Width="80" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <CheckBox Content="Auto mode (use com0com if available)"
+                                  IsChecked="{Binding VirtualComAutoMode}" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+        </Grid>
+
+        <!-- Status Bar -->
+        <Border Grid.Row="1" Background="#F0F0F0" CornerRadius="4" Padding="12,8" Margin="4,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <TextBlock Text="Status:" FontWeight="SemiBold" Margin="0,0,8,0"/>
+                    <Ellipse Width="12" Height="12" Margin="0,0,8,0">
+                        <Ellipse.Style>
+                            <Style TargetType="Ellipse">
+                                <Setter Property="Fill" Value="Gray"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HealthStatus}" Value="Healthy">
+                                        <Setter Property="Fill" Value="#22C55E"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding HealthStatus}" Value="Stale">
+                                        <Setter Property="Fill" Value="#EAB308"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding HealthStatus}" Value="Error">
+                                        <Setter Property="Fill" Value="#EF4444"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Ellipse.Style>
+                    </Ellipse>
+                    <TextBlock Text="{Binding HealthStatus}" Margin="0,0,24,0"/>
+                </StackPanel>
+
+                <TextBlock Grid.Column="1" Text="{Binding StatisticsText}"
+                           VerticalAlignment="Center" Foreground="#666"/>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="24,0">
+                    <TextBlock Text="Data Age:" Margin="0,0,8,0"/>
+                    <TextBlock Text="{Binding DataAge}" FontWeight="SemiBold"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="3" Orientation="Horizontal" Margin="0,0,16,0">
+                    <TextBlock Text="Rate:" Margin="0,0,8,0"/>
+                    <TextBlock Text="{Binding DataRate}" FontWeight="SemiBold"/>
+                </StackPanel>
+
+                <TextBlock Grid.Column="4" Text="{Binding StatusText}"
+                           FontWeight="SemiBold" Foreground="#666"/>
+            </Grid>
+        </Border>
+
+        <!-- NMEA Preview -->
+        <GroupBox Grid.Row="2" Header="NMEA Preview" Margin="4,0">
+            <Grid>
+                <ListBox ItemsSource="{Binding NmeaPreview}"
+                         FontFamily="Consolas" FontSize="12"
+                         BorderThickness="0"
+                         ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Padding" Value="4,2"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+                <Button Content="Clear" Command="{Binding ClearPreviewCommand}"
+                        HorizontalAlignment="Right" VerticalAlignment="Top"
+                        Margin="0,4,4,0" Padding="8,4"/>
+            </Grid>
+        </GroupBox>
+
+        <!-- Control Buttons -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,8">
+            <Button Content="Start" Command="{Binding StartCommand}"
+                    IsEnabled="{Binding IsRunning, Converter={StaticResource InverseBoolConverter}}"
+                    Width="120" FontSize="14" FontWeight="SemiBold">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="Background" Value="#22C55E"/>
+                        <Setter Property="Foreground" Value="White"/>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button Content="Stop" Command="{Binding StopCommand}"
+                    IsEnabled="{Binding IsRunning}"
+                    Width="120" FontSize="14" FontWeight="SemiBold">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="Background" Value="#EF4444"/>
+                        <Setter Property="Foreground" Value="White"/>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>
