@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WifiGPSGate - Route WiFi GPS Data to Any Application</title>
-  <meta name="description" content="Bridge NMEA data from WiFi GPS receivers to legacy GPS software. UDP/TCP input, serial port output, and more.">
+  <title>WifiGPSGate - Connect Emlid Reach & WiFi GPS to COM Ports & Legacy Software</title>
+  <meta name="description" content="Bridge NMEA/RTK data from Emlid Reach RS2+, RS3, and other WiFi GNSS receivers to virtual COM ports, surveying software, and GIS applications. UDP/TCP to serial port bridge for Windows.">
+  <meta name="keywords" content="Emlid Reach RS2, Emlid RS3, WiFi GPS to COM port, NMEA bridge, RTK to serial port, surveying software, virtual COM port, GNSS data routing, GPS to legacy software">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -20,8 +21,8 @@
   <!-- Hero Section -->
   <section class="hero">
     <div class="container">
-      <h1>Route WiFi GPS Data to Any Application</h1>
-      <p class="tagline">Bridge NMEA data from your WiFi GPS receiver to legacy GPS software, serial ports, and network clients with a single click.</p>
+      <h1>Connect Your Emlid Reach to Any Surveying Software</h1>
+      <p class="tagline">Bridge NMEA and RTK data from Emlid Reach RS2+, RS3, and other WiFi GNSS receivers to virtual COM ports, legacy surveying software, and GIS applications.</p>
       <a href="https://buy.stripe.com/7sYeVfapt2v6efm2LReZ200" class="btn btn-primary btn-large">
         Buy Now
         <span class="price-badge">$10 - One-time purchase</span>
@@ -38,7 +39,7 @@
       <h2>The Problem</h2>
       <div class="problem-content">
         <div class="problem-icon">&#128225;</div>
-        <p>WiFi GPS receivers are affordable and convenient, but most legacy GPS software only accepts data from serial (COM) ports. Getting your GPS data from a network stream into your favorite mapping, navigation, or logging application is frustrating and often requires technical workarounds.</p>
+        <p>Modern GNSS receivers like Emlid Reach output high-precision RTK data over WiFi, but your surveying software, data collectors, and GIS applications expect a COM port. Without an expensive hardware solution or complex workarounds, you're stuck unable to use your equipment with the software you need.</p>
       </div>
     </div>
   </section>
@@ -48,7 +49,71 @@
     <div class="container">
       <h2>The Solution</h2>
       <div class="solution-content">
-        <p><strong>WifiGPSGate</strong> acts as a bridge between your WiFi GPS receiver and any application that needs GPS data. Receive NMEA sentences over UDP or TCP, then route them to virtual COM ports, files, UDP broadcasts, or TCP servers. It just works.</p>
+        <p><strong>WifiGPSGate</strong> bridges the gap between your WiFi GNSS receiver and any application. Receive NMEA sentences (GGA, RMC, GSV, and more) over UDP or TCP from your Emlid Reach or other WiFi GPS, then route them to virtual COM ports for use with any surveying, mapping, or navigation software.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Compatible With Section -->
+  <section class="compatible">
+    <div class="container">
+      <h2>Works With Your Equipment</h2>
+      <p class="section-subtitle">Compatible with popular WiFi GNSS receivers and RTK systems.</p>
+      <div class="compatible-grid">
+        <div class="compatible-item">
+          <strong>Emlid Reach RS2+</strong>
+          <span>Multi-band RTK receiver</span>
+        </div>
+        <div class="compatible-item">
+          <strong>Emlid Reach RS3</strong>
+          <span>Next-gen RTK system</span>
+        </div>
+        <div class="compatible-item">
+          <strong>Emlid Reach RX</strong>
+          <span>Compact GNSS receiver</span>
+        </div>
+        <div class="compatible-item">
+          <strong>Bad Elf GNSS</strong>
+          <span>Surveyor & Flex series</span>
+        </div>
+        <div class="compatible-item">
+          <strong>Juniper Geode</strong>
+          <span>Sub-meter GPS receiver</span>
+        </div>
+        <div class="compatible-item">
+          <strong>Any WiFi GPS</strong>
+          <span>UDP/TCP NMEA output</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use Cases Section -->
+  <section class="use-cases">
+    <div class="container">
+      <h2>Built for Professionals</h2>
+      <p class="section-subtitle">Trusted by surveyors, drone operators, and GIS professionals.</p>
+      <div class="use-cases-grid">
+        <div class="use-case-card">
+          <div class="use-case-icon">&#128208;</div>
+          <h3>Land Surveying</h3>
+          <p>Connect your Emlid Reach to legacy data collectors and surveying software that only accept COM port input.</p>
+        </div>
+        <div class="use-case-card">
+          <div class="use-case-icon">&#128747;</div>
+          <h3>Drone Mapping</h3>
+          <p>Feed RTK corrections and position data to photogrammetry software and flight planning applications.</p>
+        </div>
+        <div class="use-case-card">
+          <div class="use-case-icon">&#127806;</div>
+          <h3>Precision Agriculture</h3>
+          <p>Route GNSS data to guidance systems, variable rate controllers, and farm management software.</p>
+        </div>
+        <div class="use-case-card">
+          <div class="use-case-icon">&#127758;</div>
+          <h3>GIS & Mapping</h3>
+          <p>Integrate WiFi GPS receivers with ArcGIS, QGIS, and other desktop GIS applications via virtual COM ports.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -57,37 +122,37 @@
   <section class="features">
     <div class="container">
       <h2>Features</h2>
-      <p class="section-subtitle">Everything you need to route GPS data from WiFi receivers to any destination.</p>
+      <p class="section-subtitle">Everything you need to route NMEA data from WiFi GNSS receivers to any destination.</p>
       <div class="features-grid">
         <div class="feature-card">
           <div class="feature-icon">&#128225;</div>
           <h3>UDP/TCP Input</h3>
-          <p>Receive NMEA data from WiFi GPS receivers via UDP listener or TCP client connection.</p>
+          <p>Receive NMEA data from Emlid Reach and other WiFi GNSS receivers via UDP listener or TCP client.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">&#128268;</div>
           <h3>Serial Port Output</h3>
-          <p>Send GPS data to physical or virtual COM ports for use with legacy GPS software.</p>
+          <p>Route GNSS data to physical or virtual COM ports for use with any surveying or GIS software.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">&#128196;</div>
           <h3>File Logging</h3>
-          <p>Capture all NMEA sentences to timestamped log files for later analysis.</p>
+          <p>Capture all NMEA sentences (GGA, RMC, GSV, etc.) to timestamped log files for post-processing.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">&#128225;</div>
           <h3>UDP Broadcast</h3>
-          <p>Distribute GPS data across your network to multiple applications simultaneously.</p>
+          <p>Distribute GNSS data across your network to multiple applications and devices simultaneously.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">&#127760;</div>
           <h3>TCP Server</h3>
-          <p>Host a TCP server for multiple clients to connect and receive GPS data.</p>
+          <p>Host a TCP server for multiple clients to connect and receive real-time position data.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">&#128187;</div>
           <h3>Virtual COM Ports</h3>
-          <p>Works with virtual serial port drivers to create software COM ports on demand.</p>
+          <p>Works with virtual serial port drivers to create software COM ports for legacy applications.</p>
         </div>
       </div>
     </div>
@@ -101,20 +166,20 @@
       <div class="steps">
         <div class="step">
           <div class="step-number">1</div>
-          <h3>Receive</h3>
-          <p>Configure WifiGPSGate to listen for NMEA data from your WiFi GPS receiver via UDP or TCP.</p>
+          <h3>Connect</h3>
+          <p>Point WifiGPSGate at your Emlid Reach or other WiFi GNSS receiver's IP address and port.</p>
         </div>
         <span class="step-arrow">&#8594;</span>
         <div class="step">
           <div class="step-number">2</div>
           <h3>Route</h3>
-          <p>Select your output destinations: serial ports, files, UDP broadcast, or TCP server.</p>
+          <p>Select your outputs: virtual COM port for surveying software, file logging, or network distribution.</p>
         </div>
         <span class="step-arrow">&#8594;</span>
         <div class="step">
           <div class="step-number">3</div>
-          <h3>Output</h3>
-          <p>Your GPS data flows seamlessly to all configured destinations in real-time.</p>
+          <h3>Work</h3>
+          <p>Your GNSS data flows seamlessly to all configured destinations. Open your software and start collecting.</p>
         </div>
       </div>
     </div>
@@ -123,8 +188,8 @@
   <!-- CTA Section -->
   <section class="cta">
     <div class="container">
-      <h2>Ready to Route Your GPS Data?</h2>
-      <p>Get WifiGPSGate now and connect your WiFi GPS receiver to any application.</p>
+      <h2>Ready to Connect Your Emlid Reach?</h2>
+      <p>Stop wrestling with workarounds. Get WifiGPSGate and connect your GNSS receiver to any software in minutes.</p>
       <a href="https://buy.stripe.com/7sYeVfapt2v6efm2LReZ200" class="btn btn-primary btn-large">
         Buy Now
         <span class="price-badge">$10 - One-time purchase</span>
